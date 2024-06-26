@@ -4,14 +4,6 @@ import matplotlib.pyplot as plt
 
 # Set page config
 st.set_page_config(page_title="Gaming Trends Dashboard", layout="wide")
-hide_menu_style = """
-    <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    body {background-color: #212121;}
-    </style>
-    """
-st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 # Load the data
 @st.cache_data
@@ -22,7 +14,7 @@ df = load_data()
 
 # Set up the main page
 st.title("Gaming Trends in MENA Expanded")
-st.markdown("mobile")
+
 # Country selector (radio buttons)
 default_countries = ["Saudi Arabia", "UAE", "Egypt", "Morocco", "Iraq"]
 selected_country = st.sidebar.radio(
@@ -70,7 +62,7 @@ col1, col2 = st.columns(2)
 with col1:
     display_top_5(engagement_data, f"Top Games (Engagement) - {selected_country}")
     plot_top_5(engagement_data, f"Top Games (Engagement) - {selected_country}")
-
+    
     display_top_5(genres_data, f"Top Genres - {selected_country}")
     plot_top_5(genres_data, f"Top Genres - {selected_country}")
 
@@ -78,14 +70,67 @@ with col1:
     plot_top_5(trends_data, f"Emerging Trends - {selected_country}")
 
 with col2:
-
     display_top_5(monetization_data, f"Top Games (Monetization) - {selected_country}")
-    plot_top_5(monetization_data, f"Top Games (Monetization) - {selected_country}")    
+    plot_top_5(monetization_data, f"Top Games (Monetization) - {selected_country}")
 
     display_top_5(publishers_data, f"Top Publishers - {selected_country}")
     plot_top_5(publishers_data, f"Top Publishers - {selected_country}")
 
+# Display additional data for Population, Language, and Market Size
+pop_mena_data = {
+    'Region': ["UAE", "Saudi Arabia", "Yemen", "Oman", "Iraq", "Bahrain", "Kuwait", "Sudan", "Lebanon", "Syria", "Jordan", "Palestine", "Egypt", "Algeria", "Libya", "Morocco", "Tunisia", "Pakistan", "Bangladesh", "India", "Iran", "Qatar", "Turkey", "Israel"],
+    'Population': [9, 36, 35, 5, 47, 2, 5, 49, 5, 24, 12, 6, 111, 47, 8, 37, 13, 236, 173, 1430, 90, 3, 84, 10],
+    'Language/s': ["Arabic, English", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic, Berber (Tamazight)", "Arabic", "Arabic (w/ Berber)", "Arabic", "Urdu", "Bengali", "Hindi, English, and numerous regional languages", "Persian (Farsi)", "Arabic", "Turkish", "Hebrew"],
+    'Market Size ($M)': [400, 1000, 45, 68, 92, 34, 75, 50, 105, 80, 120, 40, 983, 200, 70, 202, 80, 139, 130, 1200, 180, 150, 888, 520]
+}
 
+pop_mena_df = pd.DataFrame(pop_mena_data)
+
+# Plot Population Data
+def plot_population():
+    fig, ax = plt.subplots()
+    ax.barh(pop_mena_df['Region'], pop_mena_df['Population'], color='blue')
+    ax.set_title('Population by Region')
+    st.pyplot(fig)
+
+# Plot Market Size Data
+def plot_market_size():
+    fig, ax = plt.subplots()
+    ax.barh(pop_mena_df['Region'], pop_mena_df['Market Size ($M)'], color='orange')
+    ax.set_title('Market Size by Region ($M)')
+    st.pyplot(fig)
+
+# Plot Language Data
+def plot_language():
+    # Count occurrences of languages
+    language_counts = pop_mena_df['Language/s'].str.split(', ').explode().value_counts()
+    fig, ax = plt.subplots()
+    ax.barh(language_counts.index, language_counts.values, color='purple')
+    ax.set_title('Languages by Region')
+    st.pyplot(fig)
+
+# Plot Region by Languages Data
+def plot_region_by_language():
+    fig, ax = plt.subplots()
+    # Expand language counts to one row per language
+    expanded_languages = pop_mena_df.set_index(['Region']).explode('Language/s').reset_index()
+    # Calculate the size of each bubble
+    language_region_counts = expanded_languages.groupby(['Language/s', 'Region']).size().reset_index(name='Counts')
+    # Create a scatter plot
+    scatter = ax.scatter(language_region_counts['Language/s'], language_region_counts['Region'],
+                         s=language_region_counts['Counts']*100, alpha=0.5, color='brown')
+    ax.set_title('Region by Languages')
+    ax.set_ylabel('Region')
+    ax.set_xlabel('Language')
+    plt.xticks(rotation=90, fontsize=8)  # Rotate and set smaller font size for x-axis labels
+    st.pyplot(fig)
+
+# Display population, market size, language, and region by language charts
+st.subheader("Additional Data")
+plot_population()
+plot_market_size()
+plot_language()
+plot_region_by_language()
 
 # Display raw data
 if st.checkbox("Show Raw Data"):
