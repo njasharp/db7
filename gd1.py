@@ -86,19 +86,14 @@ with col2:
     plot_top_5(publishers_data, f"Top Publishers - {selected_country}")
 
 # Display additional data for Population, Language, and Market Size
-pop_mena_data = {
-    'Region': ["UAE", "Saudi Arabia", "Yemen", "Oman", "Iraq", "Bahrain", "Kuwait", "Sudan", "Lebanon", "Syria", "Jordan", "Palestine", "Egypt", "Algeria", "Libya", "Morocco", "Tunisia", "Pakistan", "Bangladesh", "India", "Iran", "Qatar", "Turkey", "Israel"],
-    'Population': [9, 36, 35, 5, 47, 2, 5, 49, 5, 24, 12, 6, 111, 47, 8, 37, 13, 236, 173, 1430, 90, 3, 84, 10],
-    'Language/s': ["Arabic, English", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic", "Arabic, Berber (Tamazight)", "Arabic", "Arabic (w/ Berber)", "Arabic", "Urdu", "Bengali", "Hindi, English, and numerous regional languages", "Persian (Farsi)", "Arabic", "Turkish", "Hebrew"],
-    'Market Size ($M)': [400, 1000, 45, 68, 92, 34, 75, 50, 105, 80, 120, 40, 983, 200, 70, 202, 80, 139, 130, 1200, 180, 150, 888, 520]
-}
 
-pop_mena_df = pd.DataFrame(pop_mena_data)
+
+pop_mena_df = pd.read_csv("pop_mena.csv")
 
 # Plot Population Data
 def plot_population():
     fig, ax = plt.subplots()
-    ax.barh(pop_mena_df['Region'], pop_mena_df['Population'], color='blue')
+    ax.barh(pop_mena_df['Region'], pop_mena_df['Population M'], color='blue')
     ax.set_title('Population by Region')
     st.pyplot(fig)
 
@@ -142,8 +137,12 @@ plot_language()
 plot_region_by_language()
 
 # Display raw data
-if st.checkbox("Show Raw Data"):
+if st.checkbox("Show Raw Data filtered"):
     st.subheader("Raw Data")
     st.write(filtered_df)
 
+if st.checkbox("Show Raw Data more "):
+    st.subheader("Raw Data more")
+    st.write(pop_mena_df)
+    
 st.info("built by dw v1 6-26")
