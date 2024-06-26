@@ -144,5 +144,5 @@ if st.checkbox("Show Raw Data filtered"):
 if st.checkbox("Show Raw Data more "):
     st.subheader("Raw Data more")
     st.write(pop_mena_df)
-    
+st.markdown("mobile")  
 st.info("built by dw v1 6-26")
