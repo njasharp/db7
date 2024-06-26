@@ -4,6 +4,14 @@ import matplotlib.pyplot as plt
 
 # Set page config
 st.set_page_config(page_title="Gaming Trends Dashboard", layout="wide")
+hide_menu_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    body {background-color: #212121;}
+    </style>
+    """
+st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 # Load the data
 @st.cache_data
