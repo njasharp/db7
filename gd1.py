@@ -21,6 +21,9 @@ def load_data():
 
 df = load_data()
 
+# Load additional data
+pop_mena_df = pd.read_csv("pop_mena.csv")
+
 # Set up the main page
 st.title("Gaming Trends in MENA Expanded")
 
@@ -34,6 +37,7 @@ selected_country = st.sidebar.radio(
 
 # Filter data based on selected country
 filtered_df = df[df['Country'] == selected_country]
+filtered_pop_df = pop_mena_df[pop_mena_df['Region'] == selected_country]
 
 # Function to clean and format data items
 def clean_data_items(data):
@@ -57,6 +61,8 @@ def plot_top_5(data, title):
     ax.set_xticks([])  # Remove the x-axis labels
     ax.set_title(title)
     ax.invert_yaxis()  # Reverse the order of the y-axis
+    for i, v in enumerate(values):
+        ax.text(v, i, " " + str(v), va='center', color='white', fontweight='bold')
     st.pyplot(fig)
 
 # Display top 5 lists
@@ -87,21 +93,22 @@ with col2:
 
 # Display additional data for Population, Language, and Market Size
 
-
-pop_mena_df = pd.read_csv("pop_mena.csv")
-
 # Plot Population Data
 def plot_population():
     fig, ax = plt.subplots()
-    ax.barh(pop_mena_df['Region'], pop_mena_df['Population M'], color='blue')
+    bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Population M'], color='blue')
     ax.set_title('Population by Region')
+    for bar in bars:
+        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
     st.pyplot(fig)
 
 # Plot Market Size Data
 def plot_market_size():
     fig, ax = plt.subplots()
-    ax.barh(pop_mena_df['Region'], pop_mena_df['Market Size ($M)'], color='orange')
+    bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Market Size ($M)'], color='orange')
     ax.set_title('Market Size by Region ($M)')
+    for bar in bars:
+        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
     st.pyplot(fig)
 
 # Plot Language Data
@@ -109,8 +116,10 @@ def plot_language():
     # Count occurrences of languages
     language_counts = pop_mena_df['Language/s'].str.split(', ').explode().value_counts()
     fig, ax = plt.subplots()
-    ax.barh(language_counts.index, language_counts.values, color='purple')
+    bars = ax.barh(language_counts.index, language_counts.values, color='purple')
     ax.set_title('Languages by Region')
+    for bar in bars:
+        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
     st.pyplot(fig)
 
 # Plot Region by Languages Data
@@ -129,12 +138,38 @@ def plot_region_by_language():
     plt.xticks(rotation=90, fontsize=8)  # Rotate and set smaller font size for x-axis labels
     st.pyplot(fig)
 
+# Plot Mobile, PC, Console %
+def plot_device_usage():
+    fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
+    categories = ['Mobile %', 'PC %', 'Console %']
+    values = filtered_pop_df[categories].mean()
+    bars = ax.bar(categories, values, color=['red', 'green', 'blue'])
+    ax.set_title(f'Device Usage % - {selected_country}')
+    for bar in bars:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
+    st.pyplot(fig)
+
+# Plot iOS, Android %
+def plot_mobile_os_usage():
+    fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
+    categories = ['IOS %', 'Android %']
+    values = filtered_pop_df[categories].mean()
+    bars = ax.bar(categories, values, color=['blue', 'green'])
+    ax.set_title(f'Mobile OS Usage % - {selected_country}')
+    for bar in bars:
+        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
+    st.pyplot(fig)
+
 # Display population, market size, language, and region by language charts
 st.subheader("Additional Data")
 plot_population()
 plot_market_size()
 plot_language()
 plot_region_by_language()
+
+# Put new charts here
+plot_device_usage()
+plot_mobile_os_usage()
 
 # Display raw data
 if st.checkbox("Show Raw Data filtered"):
@@ -145,4 +180,4 @@ if st.checkbox("Show Raw Data more "):
     st.subheader("Raw Data more")
     st.write(pop_mena_df)
 st.markdown("mobile")  
-st.info("built by dw v1 6-26")
+st.info("built by dw v1.1 6-28")
