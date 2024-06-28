@@ -1,25 +1,25 @@
-Region,Population M,Language/s,Market Size ($M)
-UAE,9,"Arabic, English",400
-Saudi Arabia,36,Arabic,1000
-Yemen,35,Arabic,45
-Oman,5,Arabic,68
-Iraq,47,Arabic,92
-Bahrain,2,Arabic,34
-Kuwait,5,Arabic,75
-Sudan,49,Arabic,50
-Lebanon,5,Arabic,105
-Syria,24,Arabic,80
-Jordan,12,Arabic,120
-Palestine,6,Arabic,40
-Egypt,111,Arabic,983
-Algeria,47,"Arabic, Berber (Tamazight)",200
-Libya,8,Arabic,70
-Morocco,37,Arabic (w/ Berber),202
-Tunisia,13,Arabic,80
-Pakistan,236,Urdu,139
-Bangladesh,173,Bengali,130
-India,1430,"Hindi, English, and numerous regional languages",1200
-Iran,90,Persian (Farsi),180
-Qatar,3,Arabic,150
-Turkey,84,Turkish,888
-Israel,10,Hebrew,520
+Region,Population M,Language/s,Market Size ($M),Mobile %,PC %,Console %,IOS %,Android %
+UAE,9,"Arabic, English",400,70,18,12,60,40
+Saudi Arabia,36,Arabic,1000,66,20,14,55,45
+Yemen,35,Arabic,45,55,15,10,40,60
+Oman,5,Arabic,68,60,20,20,50,50
+Iraq,47,Arabic,92,65,25,10,85,15
+Bahrain,2,Arabic,34,60,25,15,65,35
+Kuwait,5,Arabic,75,70,15,15,60,40
+Sudan,49,Arabic,50,65,20,15,55,45
+Lebanon,5,Arabic,105,68,20,12,60,40
+Syria,24,Arabic,80,70,20,10,50,50
+Jordan,12,Arabic,120,65,25,10,55,45
+Palestine,6,Arabic,40,60,25,15,65,35
+Egypt,111,Arabic,983,72,15,13,80,20
+Algeria,47,"Arabic, Berber (Tamazight)",200,70,20,10,55,45
+Libya,8,Arabic,70,65,20,15,60,40
+Morocco,37,Arabic (w/ Berber),202,68,22,10,75,25
+Tunisia,13,Arabic,80,70,20,10,60,40
+Pakistan,236,Urdu,139,60,20,20,55,45
+Bangladesh,173,Bengali,130,65,20,15,50,50
+India,1430,"Hindi, English, and numerous regional languages",1200,70,20,10,60,40
+Iran,90,Persian (Farsi),180,65,25,10,55,45
+Qatar,3,Arabic,150,70,20,10,65,35
+Turkey,84,Turkish,888,60,25,15,50,50
+Israel,10,Hebrew,520,68,22,10,75,25
