@@ -186,5 +186,5 @@ if st.checkbox("Show Raw Data filtered"):
 if st.checkbox("Show Raw Data more "):
     st.subheader("Raw Data more")
     st.write(pop_mena_df)
-st.markdown("mobile")  
+st.markdown("mobile sources - https://datareportal.com, https://www.opensignal.com/")  
 st.info("built by dw v1.1 6-28")
