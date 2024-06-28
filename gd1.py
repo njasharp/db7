@@ -91,85 +91,92 @@ with col2:
     display_top_5(publishers_data, f"Top Publishers - {selected_country}")
     plot_top_5(publishers_data, f"Top Publishers - {selected_country}")
 
-# Display additional data for Population, Language, and Market Size
-
-# Plot Population Data
-def plot_population():
-    fig, ax = plt.subplots()
-    bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Population M'], color='blue')
-    ax.set_title('Population by Region')
-    for bar in bars:
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
-    st.pyplot(fig)
-
-# Plot Market Size Data
-def plot_market_size():
-    fig, ax = plt.subplots()
-    bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Market Size ($M)'], color='orange')
-    ax.set_title('Market Size by Region ($M)')
-    for bar in bars:
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
-    st.pyplot(fig)
-
-# Plot Language Data
-def plot_language():
-    # Count occurrences of languages
-    language_counts = pop_mena_df['Language/s'].str.split(', ').explode().value_counts()
-    fig, ax = plt.subplots()
-    bars = ax.barh(language_counts.index, language_counts.values, color='purple')
-    ax.set_title('Languages by Region')
-    for bar in bars:
-        ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
-    st.pyplot(fig)
-
-# Plot Region by Languages Data
-def plot_region_by_language():
-    fig, ax = plt.subplots()
-    # Expand language counts to one row per language
-    expanded_languages = pop_mena_df.set_index(['Region']).explode('Language/s').reset_index()
-    # Calculate the size of each bubble
-    language_region_counts = expanded_languages.groupby(['Language/s', 'Region']).size().reset_index(name='Counts')
-    # Create a scatter plot
-    scatter = ax.scatter(language_region_counts['Language/s'], language_region_counts['Region'],
-                         s=language_region_counts['Counts']*100, alpha=0.5, color='brown')
-    ax.set_title('Region by Languages')
-    ax.set_ylabel('Region')
-    ax.set_xlabel('Language')
-    plt.xticks(rotation=90, fontsize=8)  # Rotate and set smaller font size for x-axis labels
-    st.pyplot(fig)
-
-# Plot Mobile, PC, Console %
-def plot_device_usage():
-    fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
-    categories = ['Mobile %', 'PC %', 'Console %']
-    values = filtered_pop_df[categories].mean()
-    bars = ax.bar(categories, values, color=['red', 'green', 'blue'])
-    ax.set_title(f'Device Usage % - {selected_country}')
-    for bar in bars:
-        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
-    st.pyplot(fig)
-
-# Plot iOS, Android %
-def plot_mobile_os_usage():
-    fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
-    categories = ['IOS %', 'Android %']
-    values = filtered_pop_df[categories].mean()
-    bars = ax.bar(categories, values, color=['blue', 'green'])
-    ax.set_title(f'Mobile OS Usage % - {selected_country}')
-    for bar in bars:
-        ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
-    st.pyplot(fig)
-
-# Display population, market size, language, and region by language charts
-st.subheader("Additional Data")
-plot_population()
-plot_market_size()
-plot_language()
-plot_region_by_language()
-
 # Put new charts here
-plot_device_usage()
-plot_mobile_os_usage()
+st.subheader("Device and Mobile OS Usage")
+col3, col4 = st.columns(2)
+with col3:
+    if not filtered_pop_df.empty:
+        fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
+        categories = ['Mobile %', 'PC %', 'Console %']
+        values = filtered_pop_df[categories].mean()
+        bars = ax.bar(categories, values, color=['red', 'green', 'blue'])
+        ax.set_title(f'Device Usage % - {selected_country}')
+        for bar in bars:
+            ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
+        st.pyplot(fig)
+    else:
+        st.write(f"No data available for {selected_country}")
+
+with col4:
+    if not filtered_pop_df.empty:
+        fig, ax = plt.subplots(figsize=(5.6, 4.2))  # 30% smaller
+        categories = ['IOS %', 'Android %']
+        values = filtered_pop_df[categories].mean()
+        bars = ax.bar(categories, values, color=['blue', 'green'])
+        ax.set_title(f'Mobile OS Usage % - {selected_country}')
+        for bar in bars:
+            ax.text(bar.get_x() + bar.get_width()/2, bar.get_height(), f'{bar.get_height():.2f}', ha='center', va='bottom', color='black', fontweight='bold')
+        st.pyplot(fig)
+    else:
+        st.write(f"No data available for {selected_country}")
+
+# Display additional data for Population, Language, and Market Size
+st.subheader("Additional Data")
+
+col5, col6 = st.columns(2)
+with col5:
+    # Plot Population Data
+    def plot_population():
+        fig, ax = plt.subplots()
+        bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Population M'], color='blue')
+        ax.set_title('Population by Region')
+        for bar in bars:
+            ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
+        st.pyplot(fig)
+    plot_population()
+
+with col6:
+    # Plot Market Size Data
+    def plot_market_size():
+        fig, ax = plt.subplots()
+        bars = ax.barh(pop_mena_df['Region'], pop_mena_df['Market Size ($M)'], color='orange')
+        ax.set_title('Market Size by Region ($M)')
+        for bar in bars:
+            ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
+        st.pyplot(fig)
+    plot_market_size()
+
+col7, col8 = st.columns(2)
+with col7:
+    # Plot Language Data
+    def plot_language():
+        # Count occurrences of languages
+        language_counts = pop_mena_df['Language/s'].str.split(', ').explode().value_counts()
+        fig, ax = plt.subplots()
+        bars = ax.barh(language_counts.index, language_counts.values, color='purple')
+        ax.set_title('Languages by Region')
+        for bar in bars:
+            ax.text(bar.get_width(), bar.get_y() + bar.get_height()/2, f' {bar.get_width()}', va='center', color='white', fontweight='bold')
+        st.pyplot(fig)
+    plot_language()
+
+with col8:
+    # Plot Region by Languages Data
+    def plot_region_by_language():
+        fig, ax = plt.subplots()
+        # Expand language counts to one row per language
+        expanded_languages = pop_mena_df.set_index(['Region']).explode('Language/s').reset_index()
+        # Calculate the size of each bubble
+        language_region_counts = expanded_languages.groupby(['Language/s', 'Region']).size().reset_index(name='Counts')
+        # Create a scatter plot
+        scatter = ax.scatter(language_region_counts['Language/s'], language_region_counts['Region'],
+                             s=language_region_counts['Counts']*100, alpha=0.5, color='brown')
+        ax.set_title('Region by Languages')
+        ax.set_ylabel('Region')
+        ax.set_xlabel('Language')
+        plt.xticks(rotation=90, fontsize=8)  # Rotate and set smaller font size for x-axis labels
+        st.pyplot(fig)
+    plot_region_by_language()
 
 # Display raw data
 if st.checkbox("Show Raw Data filtered"):
