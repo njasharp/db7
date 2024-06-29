@@ -188,10 +188,10 @@ if st.checkbox("Show Raw Data more "):
     st.write(pop_mena_df)
 
 st.markdown("Sources:")  
-st.markdown("1. Population and Demographics: - https://www.worldometers.info/  , https://worldpopulationreview.com/")  
-st.markdown("2. Market Size: https://www.statista.com/, https://newzoo.com/")  
+st.markdown("1. Population and Demographics:- https://www.worldometers.info/ , https://worldpopulationreview.com/")  
+st.markdown("2. Market Size:- https://www.statista.com/, https://newzoo.com/")  
 
-st.markdown("3. Platforms and Trends: https://www.globalmediainsight.com/, https://datareportal.com/")  
-st.markdown("4. Mobile -  https://datareportal.com, https://www.opensignal.com/")  
+st.markdown("3. Platforms and Trends:- https://www.globalmediainsight.com/, https://datareportal.com/")  
+st.markdown("4. Mobile:- https://datareportal.com, https://www.opensignal.com/")  
 
 st.info("built by dw v1.1 6-28")
